@@ -1,0 +1,13 @@
+logo:
+  image: ./docs/images/logo1.png
+footer:
+  copyrightText: FastFood FIAP © 2024
+extends:
+  - minimal
+theme:
+  openapi:
+    schemaExpansionLevel: 2
+    generateCodeSamples:
+      languages:
+        - lang: curl
+        - lang: Python

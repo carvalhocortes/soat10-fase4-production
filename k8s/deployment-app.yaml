@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fiap-fast-food-app
+  namespace: default
+  labels:
+    app: fiap-fast-food-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fiap-fast-food-app
+  template:
+    metadata:
+      labels:
+        app: fiap-fast-food-app
+    spec:
+      containers:
+        - name: fiap-fast-food-app
+          image: 578625597971.dkr.ecr.us-west-2.amazonaws.com/fiap-prod:latest
+          resources:
+            requests:
+              cpu: 128m
+              memory: 256Mi
+            limits:
+              cpu: 256m
+              memory: 512Mi
+          ports:
+            - containerPort: 3333
+          envFrom:
+            - configMapRef:
+                name: fiap-fast-food-config
+            - secretRef:
+                name: fiap-fast-food-secret
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3333
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3333
+            initialDelaySeconds: 5
+            periodSeconds: 10
