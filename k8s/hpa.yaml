@@ -7,7 +7,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: fiap-fast-food-app
+    name: fiap-fast-food-app-production
   minReplicas: 2
   maxReplicas: 10
   metrics:

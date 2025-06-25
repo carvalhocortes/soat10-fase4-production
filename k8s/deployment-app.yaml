@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fiap-fast-food-app
+  name: fiap-fast-food-app-production
   namespace: default
   labels:
-    app: fiap-fast-food-app
+    app: fiap-fast-food-app-production
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: fiap-fast-food-app
+      app: fiap-fast-food-app-production
   template:
     metadata:
       labels:
-        app: fiap-fast-food-app
+        app: fiap-fast-food-app-production
     spec:
       containers:
-        - name: fiap-fast-food-app
-          image: 578625597971.dkr.ecr.us-west-2.amazonaws.com/fiap-prod:latest
+        - name: fiap-fast-food-app-production
+          image: 578625597971.dkr.ecr.us-west-2.amazonaws.com/fiap-prod-production:latest
           resources:
             requests:
               cpu: 128m

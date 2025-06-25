@@ -4,7 +4,7 @@ metadata:
   name: fiap-fast-food-config
   namespace: default
   labels:
-    app: fiap-fast-food-app
+    app: fiap-fast-food-app-production
 data:
   PORT: "3333"
   AWS_REGION: "us-west-2"
