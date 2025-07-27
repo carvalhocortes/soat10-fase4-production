@@ -12,7 +12,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: fiap-fast-food-app
+    app: fiap-fast-food-app-production
   ports:
     - port: 80
       targetPort: 3333

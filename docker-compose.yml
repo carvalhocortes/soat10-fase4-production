@@ -1,6 +1,6 @@
 services:
   app:
-    container_name: fiap-fast-food-app
+    container_name: fiap-fast-food-app-production
     build: ./
     ports:
       - '3333:3333'

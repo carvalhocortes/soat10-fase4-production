@@ -56,7 +56,7 @@ metadata:
   name: fiap-fast-food-secret
   namespace: default
   labels:
-    app: fiap-fast-food-app
+    app: fiap-fast-food-app-production
 type: Opaque
 data:
   AWS_ACCESS_KEY_ID: $ENCODED_ACCESS_KEY_ID
