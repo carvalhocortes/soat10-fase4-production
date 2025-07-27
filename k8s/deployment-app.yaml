@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: fiap-fast-food-app-production
-          image: 578625597971.dkr.ecr.us-west-2.amazonaws.com/fiap-prod-production:latest
+          image: ${IMAGE}
           resources:
             requests:
               cpu: 128m
