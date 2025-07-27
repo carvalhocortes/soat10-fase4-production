@@ -8,7 +8,8 @@ on:
 env:
   AWS_REGION: us-west-2
   CLUSTER_NAME: eks-fiap-soat10-prod
-  AWS_ACCOUNT_ID: 578625597971
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  AWS_ECR_NAME: fiap-production-prod
 
 jobs:
   deploy-production:
@@ -22,7 +23,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.AWS_REGION }}
 
@@ -36,9 +37,9 @@ jobs:
 
       - name: BuildAndPush Dockerfile
         run: |
-          docker build -t fiap-prod-production . && \
-          docker tag fiap-prod-production:latest ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/fiap-prod-production:latest && \
-          docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/fiap-prod-production:latest
+          docker build -t ${{ env.AWS_ECR_NAME }} . && \
+          docker tag ${{ env.AWS_ECR_NAME }}:latest ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_NAME }}:latest && \
+          docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_NAME }}:latest
 
       - name: Update Kube Config
         run: |
@@ -50,7 +51,8 @@ jobs:
         run: |
           kubectl apply -f k8s/configmap.yaml
           kubectl apply -f k8s/secret.yaml
-          kubectl apply -f k8s/deployment-app.yaml
+          export IMAGE=${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_NAME }}:latest
+          envsubst < k8s/deployment-app.yaml | kubectl apply -f -
           kubectl apply -f k8s/service.yaml
           kubectl apply -f k8s/hpa.yaml
           kubectl apply -f k8s/ingress.yaml
