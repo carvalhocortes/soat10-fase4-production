@@ -1,14 +1,14 @@
-import { database } from '@infrastructure/db/config/database.config';
+import { AppDataSource } from '@infrastructure/db/config/database.config';
 import Server from '@infrastructure/web/server';
 
 const start = async () => {
   try {
-    database.getInstance();
-    await database.connect();
+    await AppDataSource.initialize();
+    console.log('Conectado ao MySQL com TypeORM');
     const server = new Server();
     server.start();
   } catch (error) {
-    console.log('Failed to start application:', error);
+    console.log('Falha ao iniciar aplicação:', error);
     process.exit(1);
   }
 };
@@ -16,7 +16,7 @@ const start = async () => {
 start();
 
 const shutdown = async () => {
-  await database.disconnect();
+  await AppDataSource.destroy();
   process.exit(0);
 };
 
