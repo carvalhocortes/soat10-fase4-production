@@ -52,7 +52,7 @@ jobs:
         env:
           IMAGE: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_NAME }}:latest
         run: |
-          kubectl apply -f k8s/configmap.yaml
+          envsubst < k8s/configmap.yaml | kubectl apply -f -
           export BASE64_ACCESS_KEY_ID=$(echo -n "${{ secrets.AWS_ACCESS_KEY_ID }}" | base64 -w 0)
           export BASE64_SECRET_ACCESS_KEY=$(echo -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}" | base64 -w 0)
           export BASE64_SESSION_TOKEN=$(echo -n "${{ secrets.AWS_SESSION_TOKEN }}" | base64 -w 0)
