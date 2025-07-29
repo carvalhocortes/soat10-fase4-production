@@ -24,7 +24,14 @@ export default [
       ...pluginJs.configs.recommended.rules,
       ...tseslint.configs.recommended.rules,
       'prettier/prettier': 'error',
-      'max-len': ['error', { code: 120 }],
+      'max-len': ['error', { code: 130 }],
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  {
+    files: ['**/*.test.ts'],
+    rules: {
+      'no-undef': 'off',
     },
   },
 ];

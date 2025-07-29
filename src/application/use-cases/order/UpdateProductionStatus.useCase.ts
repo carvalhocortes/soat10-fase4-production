@@ -1,12 +1,12 @@
-import { UpdateOrderStatusDTO } from '@application/dto/order/UpdateOrderStatus.dto';
+import { UpdateProductionStatusDTO } from '@application/dto/order/UpdateProductionStatus.dto';
 import { Order } from '@core/entities/order.entity';
 import { OrderRepository } from '@interfaces/gateways/OrderRepository.gateway';
 import { NotFoundError } from '@shared/errors/NotFoundError';
 
-export class UpdateOrderStatusUseCase {
+export class UpdateProductionStatusUseCase {
   constructor(private readonly orderRepository: OrderRepository) {}
 
-  async execute({ id, status }: UpdateOrderStatusDTO): Promise<Order | null> {
+  async execute({ id, status }: UpdateProductionStatusDTO): Promise<Order | null> {
     const order = await this.orderRepository.findById(id);
 
     if (!order) {
