@@ -10,6 +10,6 @@ data:
   AWS_REGION: "us-west-2"
   SQS_PAYMENT_QUEUE_URL: ${SQS_PAYMENT_QUEUE_URL}
   SNS_PAYMENT_TOPIC_ARN: ${SNS_PAYMENT_TOPIC_ARN}
-  MYSQL_PORT: 3306
-  MYSQL_USER: terraformAdmin
-  MYSQL_DATABASE: fiapdbPostgres
+  MYSQL_PORT: "3306"
+  MYSQL_USER: "terraformAdmin"
+  MYSQL_DATABASE: "fiapdbPostgres"
