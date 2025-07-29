@@ -1,39 +1,30 @@
-import { OrderRepository } from '@interfaces/gateways/OrderRepository.gateway';
-import { Order, OrderProps } from '@core/entities/order.entity';
-import { OrderModel } from '@infrastructure/db/models/order.model';
+import { AppDataSource } from '../config/database.config';
+import { Repository } from 'typeorm';
+import { Order } from '@core/entities/order.entity';
 
-export class DynamoOrderRepository implements OrderRepository {
+export class TypeORMOrderRepository {
+  private repo: Repository<Order>;
+
+  constructor() {
+    this.repo = AppDataSource.getRepository(Order);
+  }
+
   async save(order: Order): Promise<Order> {
-    const newOrder = new OrderModel(order);
-    await newOrder.save();
-    return Order.reconstruct(this.toOrderProps(newOrder));
+    const savedOrder = await this.repo.save(order);
+    return Order.reconstruct(savedOrder);
   }
 
   async findById(id: string): Promise<Order | null> {
-    const order = await OrderModel.get(id);
+    const order = await this.repo.findOneBy({ id });
     if (!order) {
       return null;
     }
-    return Order.reconstruct(this.toOrderProps(order));
+    return Order.reconstruct(order);
   }
 
-  async update(id: string, order: Order): Promise<Order | null> {
-    const { ...orderProps } = order;
-    delete orderProps.id;
-    const updatedOrder = await OrderModel.update(id, orderProps);
-    if (!updatedOrder) {
-      return null;
-    }
-    return Order.reconstruct(this.toOrderProps(updatedOrder));
-  }
-
-  private toOrderProps(document: OrderProps): OrderProps {
-    return {
-      id: document.id,
-      orderId: document.orderId,
-      status: document.status,
-      createdAt: document.createdAt,
-      updatedAt: document.updatedAt,
-    };
+  async update(id: string, order: Partial<Order>): Promise<Order | null> {
+    await this.repo.update(id, order);
+    const updatedOrder = await this.findById(id);
+    return Order.reconstruct(updatedOrder!);
   }
 }

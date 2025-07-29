@@ -1,30 +1,21 @@
-import { OrderStatus } from '@core/entities/order.entity';
-import * as dynamoose from 'dynamoose';
-import { Item } from 'dynamoose/dist/Item';
+import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-interface OrderProps extends Item {
-  id?: string;
-  orderId?: string;
-  status: OrderStatus;
-  createdAt?: Date;
-  updatedAt?: Date;
+export type OrderStatus = 'received' | 'in_preparation' | 'ready' | 'completed' | 'cancelled';
+
+@Entity('orders')
+export class Order {
+  @PrimaryColumn('varchar')
+  id!: string;
+
+  @Column('varchar')
+  orderId!: string;
+
+  @Column({ type: 'varchar' })
+  status!: OrderStatus;
+
+  @CreateDateColumn({ type: 'datetime' })
+  createdAt!: Date;
+
+  @UpdateDateColumn({ type: 'datetime' })
+  updatedAt!: Date;
 }
-
-const orderSchema = new dynamoose.Schema({
-  id: { type: String, hashKey: true, required: true },
-  orderId: {
-    type: String,
-    required: true,
-  },
-  status: {
-    type: String,
-    enum: ['received', 'in_preparation', 'ready', 'completed', 'cancelled'],
-    required: true,
-  },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-});
-
-export const OrderModel = dynamoose.model<OrderProps>('Order', orderSchema, {
-  tableName: 'orders',
-});

@@ -1,12 +1,12 @@
 import { SQSClient, ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk/client-sqs';
-import { ProcessPaymentOnOrderCreatedUseCase } from '@application/use-cases/payment/ProcessPaymentOnOrderCreated.useCase';
+import { ProcessOrderCreatedUseCase } from '@application/use-cases/order/ProcessOrderCreated.useCase';
 
 export class SqsListener {
   private sqs: SQSClient;
   private queueUrl: string;
-  private useCase: ProcessPaymentOnOrderCreatedUseCase;
+  private useCase: ProcessOrderCreatedUseCase;
 
-  constructor(queueUrl: string, useCase: ProcessPaymentOnOrderCreatedUseCase) {
+  constructor(queueUrl: string, useCase: ProcessOrderCreatedUseCase) {
     this.sqs = new SQSClient({});
     this.queueUrl = queueUrl;
     this.useCase = useCase;
