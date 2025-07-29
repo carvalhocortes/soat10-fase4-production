@@ -34,11 +34,11 @@ jobs:
           --password-stdin \
           ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
 
-      # - name: BuildAndPush Dockerfile
-      #   run: |
-      #     docker build -t ${{ env.AWS_ECR_NAME }} . && \
-      #     docker tag ${{ env.AWS_ECR_NAME }}:latest ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_NAME }}:latest && \
-      #     docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_NAME }}:latest
+      - name: BuildAndPush Dockerfile
+        run: |
+          docker build -t ${{ env.AWS_ECR_NAME }} . && \
+          docker tag ${{ env.AWS_ECR_NAME }}:latest ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_NAME }}:latest && \
+          docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_NAME }}:latest
 
       - name: Update Kube Config
         run: |
