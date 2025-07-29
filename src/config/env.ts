@@ -19,11 +19,11 @@ const envSchema = yup.object({
   AWS_SESSION_TOKEN: yup.string().required(),
 
   // PostgreSQL
-  POSTGRES_HOST: yup.string().default('localhost'),
+  POSTGRES_HOST: yup.string().default('terraform-20250729133008375900000001.cbvyvudwva84.us-west-2.rds.amazonaws.com'),
   POSTGRES_PORT: yup
     .number()
     .transform((value) => Number(value))
-    .default(3306),
+    .default(5432),
   POSTGRES_USER: yup.string().default('terraformAdmin'),
   POSTGRES_PASSWORD: yup.string().default('fernando'),
   POSTGRES_DB: yup.string().default('fiapdbPostgres'),
