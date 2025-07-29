@@ -29,9 +29,9 @@ spec:
             - containerPort: 3333
           envFrom:
             - configMapRef:
-                name: fiap-fast-food-config
+                name: fiap-fast-food-production-config
             - secretRef:
-                name: fiap-fast-food-secret
+                name: fiap-fast-food-production-secret
           livenessProbe:
             httpGet:
               path: /health
