@@ -1,7 +1,7 @@
 import { DataSourceOptions } from 'typeorm';
 import { Order } from './src/core/entities/order.entity';
 import { env } from '@config/env';
-//teste
+
 const config: DataSourceOptions = {
   type: 'postgres',
   host: env.POSTGRES_HOST,

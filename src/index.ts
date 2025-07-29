@@ -3,13 +3,6 @@ import Server from '@infrastructure/web/server';
 
 const start = async () => {
   try {
-    console.log('teste');
-    console.log('env', JSON.stringify(process.env, null, 2));
-    console.log('');
-    console.log('Iniciando conexão com o banco de dados...');
-    console.log('');
-    console.log('');
-    console.log('teste fim');
     await AppDataSource.initialize();
     console.log('Conectado ao MySQL com TypeORM');
     const server = new Server();
