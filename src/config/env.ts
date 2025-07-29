@@ -18,6 +18,16 @@ const envSchema = yup.object({
   AWS_SECRET_ACCESS_KEY: yup.string().required(),
   AWS_SESSION_TOKEN: yup.string().required(),
 
+  // PostgreSQL
+  POSTGRES_HOST: yup.string().required(),
+  POSTGRES_PORT: yup
+    .number()
+    .transform((value) => Number(value))
+    .default(5432),
+  POSTGRES_USER: yup.string().default('postgres'),
+  POSTGRES_PASSWORD: yup.string().required(),
+  POSTGRES_DB: yup.string().default('production'),
+
   // External APIs
 });
 
@@ -28,6 +38,11 @@ export const env = envSchema.validateSync({
   AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
   AWS_SESSION_TOKEN: process.env.AWS_SESSION_TOKEN,
+  POSTGRES_HOST: process.env.POSTGRES_HOST,
+  POSTGRES_PORT: process.env.POSTGRES_PORT,
+  POSTGRES_USER: process.env.POSTGRES_USER,
+  POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
+  POSTGRES_DB: process.env.POSTGRES_DB,
 });
 
 export type EnvConfig = yup.InferType<typeof envSchema>;
