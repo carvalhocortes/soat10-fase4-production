@@ -48,6 +48,7 @@ jobs:
           --name ${{ env.CLUSTER_NAME }} \
           --region ${{ env.AWS_REGION }}
 
+
       - name: Kube Apply
         env:
           IMAGE: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ECR_NAME }}:latest
