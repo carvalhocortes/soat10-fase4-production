@@ -1,7 +1,7 @@
 import { AppDataSource } from '@infrastructure/db/config/database.config';
 import Server from '@infrastructure/web/server';
 
-import ormconfig from '../../../../ormconfig';
+import ormconfig from '../ormconfig';
 
 const start = async () => {
   try {
