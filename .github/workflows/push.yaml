@@ -9,6 +9,8 @@ env:
   CLUSTER_NAME: eks-fiap-soat10-prod
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   AWS_ECR_NAME: fiap-production-prod
+  SQS_PAYMENT_QUEUE_URL: ${{ secrets.SQS_PAYMENT_QUEUE_URL }}
+  SNS_PAYMENT_TOPIC_ARN: ${{ secrets.SNS_PAYMENT_TOPIC_ARN }}
 
 jobs:
   deploy:
@@ -54,6 +56,8 @@ jobs:
           export BASE64_ACCESS_KEY_ID=$(echo "${{ secrets.AWS_ACCESS_KEY_ID }}" | base64)
           export BASE64_SECRET_ACCESS_KEY=$(echo "${{ secrets.AWS_SECRET_ACCESS_KEY }}" | base64)
           export BASE64_SESSION_TOKEN=$(echo "${{ secrets.AWS_SESSION_TOKEN }}" | base64 -w 0)
+          export BASE64_MYSQL_PASSWORD=$(echo "${{ secrets.MYSQL_PASSWORD }}" | base64 -w 0)
+          export BASE64_MYSQL_HOST=$(echo "${{ secrets.MYSQL_HOST }}" | base64 -w 0)
           envsubst < k8s/secret.yaml | kubectl apply -f -
           envsubst < k8s/deployment-app.yaml | kubectl apply -f -
           kubectl apply -f k8s/service.yaml
