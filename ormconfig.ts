@@ -12,6 +12,9 @@ const config: DataSourceOptions = {
   entities: [Order],
   synchronize: false,
   migrations: ['src/infrastructure/db/migrations/*.ts'],
+  ssl: {
+    rejectUnauthorized: false,
+  },
 };
 
 export default config;
