@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rm -rf dist && tsc && tsc-alias",
     "dev": "nodemon -r src/index.ts",
-    "start": "node -r tsconfig-paths/register dist/index.js",
+    "start": "node -r tsconfig-paths/register dist/src/index.js",
     "prepare": "husky install",
     "lint": "eslint 'src/**/*.{ts,tsx}' --fix",
     "test": "jest",
@@ -24,6 +24,8 @@
     "@types/node": "^22.10.5",
     "dynamoose": "^4.0.4",
     "express": "^4.21.2",
+    "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.25",
     "uuid": "^11.0.5",
     "yup": "^1.6.1"
