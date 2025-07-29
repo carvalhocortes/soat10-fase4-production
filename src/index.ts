@@ -8,7 +8,7 @@ const start = async () => {
     console.log('');
     console.log('');
     console.log('');
-    console.log(ormconfig);
+    console.log(JSON.stringify(ormconfig, null, 2));
     console.log('Iniciando conexão com o banco de dados...');
     console.log('');
     console.log('');
