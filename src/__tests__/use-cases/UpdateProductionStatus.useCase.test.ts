@@ -12,27 +12,45 @@ const mockOrderRepository = {
 const mockSnsPublisher = { publish: jest.fn() } as unknown as jest.Mocked<SnsPublisher>;
 
 describe('UpdateProductionStatusUseCase', () => {
-  it('should update the order status and publish event', async () => {
-    // Given
+  describe('Given an existing order with status "in_preparation"', () => {
     const orderId = 'order-001';
-    const order = Order.create({ id: orderId, orderId, status: 'in_preparation' });
-    mockOrderRepository.findById.mockResolvedValueOnce(order);
-    mockOrderRepository.update.mockResolvedValueOnce({ ...order, status: 'ready' });
-    mockSnsPublisher.publish.mockResolvedValueOnce(undefined);
-    const useCase = new UpdateProductionStatusUseCase(mockOrderRepository, mockSnsPublisher);
-    const status = 'ready';
 
-    // When
-    const result = await useCase.execute({ id: orderId, status });
+    let freshOrder: Order;
 
-    // Then
-    expect(result).not.toBeNull();
-    expect(result?.status).toBe('ready');
-    expect(mockOrderRepository.findById).toHaveBeenCalledWith(orderId);
-    expect(mockOrderRepository.update).toHaveBeenCalledWith(orderId, order);
-    expect(mockSnsPublisher.publish).toHaveBeenCalledWith({
-      eventType: 'PRODUCTION_STATUS_UPDATED',
-      payload: order,
+    beforeEach(() => {
+      freshOrder = Order.create({ id: orderId, orderId, status: 'in_preparation' });
+      mockOrderRepository.findById.mockResolvedValue(freshOrder);
+      mockOrderRepository.update.mockResolvedValue({ ...freshOrder, status: 'ready' });
+      mockSnsPublisher.publish.mockResolvedValue(undefined);
+    });
+
+    describe('When the production status is updated to "ready"', () => {
+      let result: Order | null;
+
+      beforeEach(async () => {
+        const useCase = new UpdateProductionStatusUseCase(mockOrderRepository, mockSnsPublisher);
+        result = await useCase.execute({ id: orderId, status: 'ready' });
+      });
+
+      it('should return the order with the updated status', () => {
+        expect(result).not.toBeNull();
+        expect(result?.status).toBe('ready');
+      });
+
+      it('should fetch the order by ID from the repository', () => {
+        expect(mockOrderRepository.findById).toHaveBeenCalledWith(orderId);
+      });
+
+      it('should update the order with the new status in the repository', () => {
+        expect(mockOrderRepository.update).toHaveBeenCalledWith(orderId, freshOrder);
+      });
+
+      it('should publish the "PRODUCTION_STATUS_UPDATED" event with the updated order', () => {
+        expect(mockSnsPublisher.publish).toHaveBeenCalledWith({
+          eventType: 'PRODUCTION_STATUS_UPDATED',
+          payload: freshOrder,
+        });
+      });
     });
   });
 
