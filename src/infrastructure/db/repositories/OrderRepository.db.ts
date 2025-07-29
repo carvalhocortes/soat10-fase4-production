@@ -1,75 +1,30 @@
-import { OrderRepository } from '@interfaces/gateways/OrderRepository.gateway';
-import { Order, OrderProps } from '@core/entities/order.entity';
-import { OrderModel } from '@infrastructure/db/models/order.model';
+import { AppDataSource } from '../config/database.config';
+import { Repository } from 'typeorm';
+import { Order } from '@core/entities/order.entity';
 
-export class DynamoOrderRepository implements OrderRepository {
-  async save(order: Order): Promise<Order> {
-    const newOrder = new OrderModel(order);
-    await newOrder.save();
-    return Order.reconstruct(this.toOrderProps(newOrder));
+export class TypeORMOrderRepository {
+  private repo: Repository<Order>;
+
+  constructor() {
+    this.repo = AppDataSource.getRepository(Order);
   }
 
-  async findAll(): Promise<Order[]> {
-    const orders = await OrderModel.scan().exec();
-    if (orders.length === 0) {
-      return [];
-    }
-    return orders.map((order) => Order.reconstruct(this.toOrderProps(order)));
+  async save(order: Order): Promise<Order> {
+    const savedOrder = await this.repo.save(order);
+    return Order.reconstruct(savedOrder);
   }
 
   async findById(id: string): Promise<Order | null> {
-    const order = await OrderModel.get(id);
+    const order = await this.repo.findOneBy({ id });
     if (!order) {
       return null;
     }
-    return Order.reconstruct(this.toOrderProps(order));
+    return Order.reconstruct(order);
   }
 
-  async findByPaymentId(paymentId: string): Promise<Order | null> {
-    const order = await OrderModel.scan('paymentId').eq(paymentId).exec();
-    if (order.count === 0) {
-      return null;
-    }
-    return Order.reconstruct(this.toOrderProps(order[0]));
-  }
-
-  async findByNumber(orderNumber: number): Promise<Order | null> {
-    const order = await OrderModel.scan('orderNumber').eq(orderNumber).exec();
-    if (order.count === 0) {
-      return null;
-    }
-    return Order.reconstruct(this.toOrderProps(order[0]));
-  }
-
-  async delete(id: string): Promise<void> {
-    await OrderModel.delete(id);
-  }
-
-  async update(id: string, order: Order): Promise<Order | null> {
-    const { ...orderProps } = order; // TO ACHANDO FEIO DE MAIS...
-    delete orderProps.id;
-    const updatedOrder = await OrderModel.update(id, orderProps);
-    if (!updatedOrder) {
-      return null;
-    }
-    return Order.reconstruct(this.toOrderProps(updatedOrder));
-  }
-
-  private toOrderProps(document: OrderProps): OrderProps {
-    return {
-      id: document.id,
-      customerId: document.customerId?.toString(),
-      products: document.products.map((product) => ({
-        id: product.id.toString(),
-        quantity: product.quantity,
-      })),
-      total: document.total,
-      status: document.status,
-      orderNumber: document.orderNumber,
-      paymentId: document.paymentId,
-      paymentStatus: document.paymentStatus,
-      createdAt: document.createdAt,
-      updatedAt: document.updatedAt,
-    };
+  async update(id: string, order: Partial<Order>): Promise<Order | null> {
+    await this.repo.update(id, order);
+    const updatedOrder = await this.findById(id);
+    return Order.reconstruct(updatedOrder!);
   }
 }
