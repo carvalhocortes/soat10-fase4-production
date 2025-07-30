@@ -35,13 +35,13 @@ spec:
                 name: fiap-fast-food-production-secret
           livenessProbe:
             httpGet:
-              path: /health
+              path: /production/health
               port: 3333
             initialDelaySeconds: 5
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /health
+              path: /production/health
               port: 3333
             initialDelaySeconds: 5
             periodSeconds: 10
