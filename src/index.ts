@@ -12,7 +12,9 @@ const start = async () => {
     server.start();
   } catch (error) {
     console.log('❌ Falha ao iniciar aplicação:', error);
-    process.exit(1);
+    setTimeout(() => {
+      process.exit(1);
+    }, 100);
   }
 };
 
