@@ -1,14 +1,13 @@
 import { AppDataSource } from '@infrastructure/db/config/database.config';
 import Server from '@infrastructure/web/server';
 
-// let isConnected = false;
+let isConnected = false;
 
 const start = async () => {
   try {
     console.log('🔗 Iniciando conexão com o Postgres...');
-    console.log(AppDataSource);
     await AppDataSource.initialize();
-    // isConnected = true;
+    isConnected = true;
     console.log('✅ Conectado ao Postgres com TypeORM');
     const server = new Server();
     server.start();
@@ -22,14 +21,14 @@ const start = async () => {
 
 start();
 
-// const shutdown = async () => {
-//   if (!isConnected) {
-//     console.log('❌ Aplicação não está conectada ao banco de dados.');
-//     process.exit(0);
-//   }
-//   await AppDataSource.destroy();
-//   process.exit(0);
-// };
+const shutdown = async () => {
+  if (!isConnected) {
+    console.log('❌ Aplicação não está conectada ao banco de dados.');
+    process.exit(0);
+  }
+  await AppDataSource.destroy();
+  process.exit(0);
+};
 
-// process.on('SIGINT', shutdown);
-// process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
