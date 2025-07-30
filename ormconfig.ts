@@ -25,6 +25,7 @@ const config: DataSourceOptions = {
   ssl: {
     rejectUnauthorized: false,
   },
+  logging: true,
 };
 
 export default config;
