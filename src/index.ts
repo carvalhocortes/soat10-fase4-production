@@ -5,9 +5,10 @@ import Server from '@infrastructure/web/server';
 
 const start = async () => {
   try {
+    console.log('🔗 Iniciando conexão com o Postgres...');
     await AppDataSource.initialize();
     // isConnected = true;
-    console.log('✅ Conectado ao MySQL com TypeORM');
+    console.log('✅ Conectado ao Postgres com TypeORM');
     const server = new Server();
     server.start();
   } catch (error) {
