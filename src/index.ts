@@ -21,7 +21,7 @@ start();
 const shutdown = async () => {
   if (!isConnected) {
     console.log('❌ Aplicação não está conectada ao banco de dados.');
-    return;
+    process.exit(0);
   }
   await AppDataSource.destroy();
   process.exit(0);
