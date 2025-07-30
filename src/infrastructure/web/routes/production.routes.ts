@@ -15,15 +15,9 @@ const orderRepository = new TypeORMOrderRepository();
 const orderController = new OrderController(new UpdateProductionStatusUseCase(orderRepository, snsPublisher));
 
 router.post(
-  'order/:id',
+  '/order/:id',
   validateRequest(orderSchemas.updateOrderProductionStatus),
   asyncHandler(orderController.updateOrderStatus),
 );
-
-router.get('/order', async (req, res) => {
-  res.status(200).json({
-    status: '/order',
-  });
-});
 
 export default router;
