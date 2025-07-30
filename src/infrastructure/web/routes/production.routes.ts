@@ -20,9 +20,9 @@ router.post(
   asyncHandler(orderController.updateOrderStatus),
 );
 
-router.get('order', async (req, res) => {
+router.get('/order', async (req, res) => {
   res.status(200).json({
-    status: 'OK',
+    status: '/order',
   });
 });
 
