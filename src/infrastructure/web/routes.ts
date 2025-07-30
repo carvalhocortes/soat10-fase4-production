@@ -4,7 +4,7 @@ import productionRoutes from '@infrastructure/web/routes/production.routes';
 const router = express.Router();
 
 // Health check
-router.get('/health', async (req, res) => {
+router.get('/production/health', async (req, res) => {
   res.status(200).json({
     status: 'OK',
   });
